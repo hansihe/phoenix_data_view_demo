@@ -3,4 +3,6 @@ defmodule PdvBackendWeb.DataRouter do
 
   data "/hello_world", PdvBackendWeb.HelloWorldData
 
+  data "/flutter_view_demo", PdvBackendWeb.FlutterViewDemoData
+
 end

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:pdv_flutter/data_view.dart';
+import 'package:pdv_flutter/tree_builder.dart';
 
 void main() {
   var service = DataViewSocketService("ws://localhost:4000/data/websocket");
@@ -49,7 +50,38 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState2 createState() => _MyHomePageState2();
+}
+
+class _MyHomePageState2 extends State<MyHomePage> {
+  int _counter = 0;
+
+  DataView? _view;
+  Map<String, dynamic>? _data;
+
+  @override
+  void didChangeDependencies() {
+    _view = DataViewSocketService.of(context).open("/flutter_view_demo", {});
+
+    _view!.data.listen((data) {
+      setState(() {
+        _data = data as Map<String, dynamic>;
+      });
+    });
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    log(_data.toString());
+
+    if (_data == null) {
+      return Center(child: Text("Loading..."));
+    } else {
+      return buildTree(_data!);
+    }
+  }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
