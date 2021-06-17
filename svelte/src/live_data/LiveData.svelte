@@ -33,6 +33,10 @@
     };
 
     let pushEvent = event => dv.pushEvent(event);
+
+    onDestroy(() => {
+        dv.leave();
+    });
 </script>
 
 {#if $state == "active"}
